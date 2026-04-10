@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #fff8e1;
+    }
+
+    .theme-header {
+      background-color: #ffb74d;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    /* Rounded green button */
+    .btn-add {
+      background-color: #28a745;
+      color: white;
+      border-radius: 25px;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+
+    .btn-add:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+
+    /* Navigation button */
+    .btn-action {
+      background-color: #007bff;
+      color: white;
+      border-radius: 25px;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+
+    .btn-action:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    /* Center align the input form */
+    .card-center {
+      max-width: 500px; /* Adjust form container width */
+      margin: 0 auto; /* Center align horizontally */
+    }
+
+    /* Card styling for items */
+    .item-card {
+      width: 200px;
+      height: 200px;
+      border-radius: 15px;
+      text-align: center;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+    }
+
+    input.form-control {
+      border-radius: 25px; /* Rounded text fields */
+    }
+
+    .item-name {
+      font-weight: bold; /* Item name in bold */
+      margin-bottom: 8px;
+    }
+
+    .item-price {
+      margin-bottom: 4px;
+    }
+
+    /* Layout for action buttons */
+    .page-action-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="theme-header">Inventory Management</div>
+
+<div class="container mt-4">
+
+  <!-- Input Section -->
+  <div class="card p-4 shadow-sm card-center">
+    <h4 class="text-center">Add Item</h4>
+
+    <input id="name" class="form-control mb-3" placeholder="Item Name">
+    <input id="price" class="form-control mb-3" placeholder="Price" type="number">
+    <input id="qty" class="form-control mb-3" placeholder="Quantity" type="number">
+
+    <button class="btn btn-add mt-2 w-100" onclick="addItem()">Add Item</button>
+  </div>
+
+    <!-- Navigation Buttons (Go to Index) -->
+    <div class="page-action-buttons">
+        <button class="btn-action" onclick="navigateToIndex()">Go to Home (Billing Page)</button>
+      </div>
+        
+  <!-- Items Section -->
+  <h5 class="text-center my-4">Items</h5>
+
+  <div id="list" class="row justify-content-center"></div>
+
+
+
+</div>
+
+<script>
+function loadItems() {
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+
+  items.forEach(item => {
+    list.innerHTML += `
+      <div class="col-md-3 mb-3 d-flex justify-content-center">
+        <div class="item-card">
+          <div class="item-name">${item.name}</div>
+          <div class="item-price">₹${item.price}</div>
+          <div class="item-qty">Qty: ${item.qty}</div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function addItem() {
+  let name = document.getElementById("name").value;
+  let price = document.getElementById("price").value;
+  let qty = document.getElementById("qty").value;
+
+  if (!name || !price || !qty) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+
+  items.push({ name, price, qty });
+
+  localStorage.setItem("items", JSON.stringify(items));
+
+  // Clear inputs
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("qty").value = "";
+
+  loadItems();
+}
+
+function navigateToIndex() {
+  // Redirect to the billing/home page
+  window.location.href = "index.html";
+}
+
+loadItems();
+</script>
+
+</body>
+</html>
